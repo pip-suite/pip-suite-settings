@@ -1,0 +1,30 @@
+{
+    "name":  "pip-suite-settings",
+    "version":  "2.0.0",
+    "author":  "Digital Living Software Corp. <www.digitallivingsoftware.com>",
+    "description":  "Extension tabs for Pip.WebUI Settings page",
+    "contributors":  [
+                         {
+                             "name":  "Sergey Seroukhov",
+                             "email":  "seroukhov@gmail.com"
+                         },
+                         {
+                             "name":  "Katerina Negrienko",
+                             "email":  "katya@negrienko.com"
+                         }
+                     ],
+    "keywords":  [
+                     "pip",
+                     "webui",
+                     "settings"
+                 ],
+    "noAnalyze":  true,
+    "license":  "MIT",
+    "private":  false,
+    "dependencies":  {
+
+                     },
+    "devDependencies":  {
+
+                        }
+}

@@ -1,0 +1,34 @@
+<div ng-hide="$ctrl.blocks.length == 0" style="min-width: 100%; min-height: 100%; height: 100%" >
+    <div  class="layout-row">
+        <md-progress-linear ng-show="$ctrl.transaction.busy()" md-mode="indeterminate" class="pip-progress-top">
+        </md-progress-linear>
+        <h2 class='text-one-line  show-gt-sm tm0'>{{::'SETTINGS_BLACKLIST_TITLE' | translate}}</h2>
+    </div >
+    <div class="layout-row">
+        <p class="text-small-secondary bm16 tm0">{{::'SETTINGS_BLACKLIST_SUBTITLE' | translate}}</p>
+    </div >
+    <div ng-repeat="block in $ctrl.blocks" ng-if="!$routing">
+
+        <div class="pip-ref-item">
+            <pip-avatar pip-party-id="block.to_party_id" pip-party-name="block.to_party_name"
+                        pip-rebind="true" class="pip-pic pip-face"></pip-avatar>
+            <div class="pip-content flex">
+                <p class="pip-title">{{::block.to_party_name}}</p>
+                <p class="pip-subtitle">{{block.created | date : 'mediumDate'}}</p>
+            </div>
+            <md-button ng-click="$ctrl.onRemove(block)" class="md-raised ">{{::'SETTINGS_BLACKLIST_UNBLOCK' | translate}}</md-button>
+        </div>
+        <div class="pip-divider"></div>
+    </div>
+
+</div>
+
+<div class="layout-column layout-align-center-center flex">
+    <div class="pip-empty layout-column layout-align-center-center"  ng-show="$ctrl.blocks.length == 0">
+
+        <img src="images/ES_BlackList.svg" class="pip-pic block">
+
+        <div class="pip-text">{{::'SETTINGS_BLACKLIST_EMPTY'| translate}}</div>
+
+    </div>
+</div>

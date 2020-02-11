@@ -1,0 +1,60 @@
+<md-dialog class="pip-dialog layout-column"  width="440">
+    <div class="pip-body">
+        <div class="pip-content">
+                <md-progress-linear ng-show="$ctrl.transaction.busy()" md-mode="indeterminate" class="pip-progress-top" >
+                </md-progress-linear>
+
+                <h2>{{::'VERIFY_EMAIL_TITLE' | translate}}</h2>
+
+                <p class="title-padding">{{::'VERIFY_EMAIL_TEXT_1' | translate}} </p>
+
+                <form name='form' novalidate>
+                    <div ng-messages="$ctrl.form.$serverError" class="text-error bm8">
+                        <div ng-message="ERROR_UNKNOWN">{{ form.$serverError.ERROR_UNKNOWN | translate }}</div>
+                    </div>
+
+                    <md-input-container class="display  bp4 md-block" >
+                        <label>{{::'EMAIL' | translate}}</label>
+                        <input name="email" type="email" ng-model="$ctrl.data.email" required step="any"
+                               pip-clear-errors  tabindex="1"
+                               ng-disabled="$ctrl.transaction.busy()"
+                               pip-test="input-email"/>
+                        <div class="hint" ng-if="$ctrl.errorsWithHint($ctrl.form, $ctrl.form.email).hint">{{::'HINT_EMAIL' | translate}}</div>
+                        <div ng-messages="$ctrl.errorsWithHint($ctrl.form, $ctrl.form.email)">
+                            <div ng-message="required">{{::'ERROR_EMAIL_INVALID' | translate }}</div>
+                            <div ng-message="ERROR_1106">{{::'ERROR_USER_NOT_FOUND' | translate}}</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block">
+                        <label>{{::'ENTRY_VERIFICATION_CODE' | translate}}</label>
+                        <input name="code" ng-disabled="$ctrl.transaction.busy()" tabindex="0"
+                               ng-model="$ctrl.data.code" required pip-clear-errors/>
+                        <div ng-messages="$ctrl.errorsWithHint($ctrl.form, $ctrl.form.code)">
+                            <div ng-message="required"> {{::'ERROR_CODE_INVALID' | translate }}</div>
+                            <div ng-message="ERROR_1103"> {{::'ERROR_CODE_WRONG' | translate }}</div>
+                        </div>
+                    </md-input-container>
+
+                    <p>
+                        {{::'VERIFY_EMAIL_TEXT_21' | translate}}
+                        <a ng-click="$ctrl.onRequestVerificationClick()" class="pointer" tabindex="0">{{::'VERIFY_EMAIL_RESEND' | translate}}</a>
+                        {{::'VERIFY_EMAIL_TEXT_22' | translate}}
+                    </p>
+                </form>
+            </div>
+        </div>
+        <div class="pip-footer">
+            <md-button ng-click="$ctrl.onCancel()" ng-hide="$ctrl.transaction.busy()" aria-label="Cancel">
+                {{::'CANCEL' | translate}}
+            </md-button>
+            <md-button class="md-accent" ng-click="$ctrl.onVerify()" ng-hide="$ctrl.transaction.busy()" tabindex="0" aria-label="Verify"
+                ng-disabled="$ctrl.data.code.length == 0 || $ctrl.data.email.length == 0 || (!$ctrl.data.email && $ctrl.form.$pristine) || (!$ctrl.data.code)">
+                {{::'VERIFY' | translate}}
+            </md-button>
+            <md-button class="md-warn" ng-show="$ctrl.transaction.busy()" ng-click="$ctrl.transaction.abort()" tabindex="0" aria-label="xxx">
+                {{::'CANCEL' | translate}}
+            </md-button>
+
+        </div>
+</md-dialog>

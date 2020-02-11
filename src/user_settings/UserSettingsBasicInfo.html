@@ -1,0 +1,118 @@
+<form name="form" class="w-stretch" novalidate>
+    <md-progress-linear class="pip-progress-top"
+                        ng-show="$ctrl.transaction.busy()"
+                        md-mode="indeterminate"></md-progress-linear>
+    <div class="layout-row bm12">
+        <div class="md-tile-left">
+            <pip-avatar-edit pip-party-id="$ctrl.$party.id"
+                             pip-created="$ctrl.onPictureCreated($event)"
+                             pip-changed="$ctrl.onPictureChanged($control, $event)">
+            </pip-avatar-edit>
+        </div>
+        <div class="md-tile-content tp0 layout-align-center">
+            <h3 class="tm16 bm8 text-one-line">{{ $ctrl.nameCopy }}</h3>
+
+            <p class="text-primary text-overflow m0">
+                {{::'SETTINGS_BASIC_INFO_FROM' | translate}}
+                {{ $ctrl.$user.signup | formatLongDate }}
+            </p>
+        </div>
+    </div>
+
+    <md-input-container class="md-block">
+        <label>{{::'SETTINGS_BASIC_INFO_FULL_NAME' | translate}}</label>
+        <input name="fullName" step="any" type="text" tabindex="0" required
+               ng-model="$ctrl.$party.name"
+               ng-disabled="$ctrl.transaction.busy()"
+               ng-change="$ctrl.onChangeBasicInfo()"/>
+
+        <div class="hint"
+             ng-if="$ctrl.errorsWithHint($ctrl.form, $ctrl.form.fullName).hint">
+            {{::'ERROR_FULLNAME_INVALID' | translate}}
+        </div>
+    </md-input-container>
+
+    <md-input-container class="md-block bm0">
+        <label>{{::'SETTINGS_BASIC_INFO_PRIMARY_EMAIL' | translate}}</label>
+        <input name="email" type="email" required
+               ng-model="$ctrl.$party.email"
+               ng-change="$ctrl.onChangeBasicInfo()"
+               pip-email-unique="{{$ctrl.$party.email}}"/>
+
+        <div class="hint"
+             ng-if="$ctrl.errorsWithHint($ctrl.form, $ctrl.form.email).hint && !$ctrl.$user.email_ver">
+            {{::'SETTINGS_BASIC_INFO_VERIFY_HINT' | translate}}
+        </div>
+        <div ng-messages="$ctrl.errorsWithHint($ctrl.form.email)" ng-hide="$ctrl.$party.type =='team'">
+            <div ng-message="email">{{::'ERROR_EMAIL_INVALID' | translate}}</div>
+            <div ng-message="emailUnique">{{::'ERROR_EMAIL_INVALID' | translate}}</div>
+        </div>
+    </md-input-container>
+
+    <md-button class="md-raised bm16 tm8 rm8"
+               ng-click="$ctrl.onVerifyEmail($event)"
+               ng-hide="$ctrl.$user.email_ver || $ctrl.$party.type =='team'">
+        {{::'SETTINGS_BASIC_INFO_VERIFY_CODE' | translate}}
+    </md-button>
+
+    <md-button ng-click="$ctrl.onChangePassword($event)" class="md-raised bm16 tm8" ng-hide="$ctrl.$party.type =='team'">
+        {{::'SETTINGS_BASIC_INFO_CHANGE_PASSWORD' | translate}}
+    </md-button>
+
+    <md-input-container class="md-block flex">
+        <label>{{::'SETTINGS_BASIC_INFO_WORDS_ABOUT_ME' | translate }}</label>
+        <textarea ng-model="$ctrl.$party.about" columns="1"
+                  ng-change="$ctrl.onChangeBasicInfo()"></textarea>
+    </md-input-container>
+
+    <md-input-container class="md-block" ng-hide="$ctrl.$party.type =='team'">
+        <label>{{::'GENDER' | translate}}</label>
+        <md-select ng-model="$ctrl.$party.gender" ng-change="$ctrl.onChangeBasicInfo()"
+                   placeholder="{{'GENDER' | translate}}">
+            <md-option ng-value="gender.id" ng-repeat="gender in $ctrl.genders">{{ $ctrl.gender.name }}</md-option>
+        </md-select>
+    </md-input-container>
+
+    <div ng-hide="$ctrl.$party.type =='team'">
+        <p class="text-caption text-grey tm0 bm0">{{::'SETTINGS_BASIC_INFO_BIRTHDAY' | translate}}</p>
+        <pip-date ng-model="$ctrl.$party.birthday"
+                  ng-change="$ctrl.onChangeBasicInfo()"
+                  pip-time-mode="past"
+                  time-mode="past">
+        </pip-date>
+    </div>
+
+    <md-input-container class="md-block"
+                        ng-hide="$ctrl.$party.type =='team'">
+        <label>{{::'LANGUAGE' | translate}}</label>
+        <md-select placeholder="{{'LANGUAGE' | translate}}"
+                   ng-model="$ctrl.$user.language"
+                   ng-change="$ctrl.onChangeUser()">
+            <md-option ng-value="language.id"
+                       ng-repeat="language in $ctrl.languages">
+                {{language.name}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+    <md-input-container class="md-block"
+                        ng-if="$ctrl.$party.type !='team'">
+        <label>{{::'THEME' | translate}}</label>
+        <md-select class="w-stretch theme-text-primary"
+                   ng-model="$ctrl.$user.theme"
+                   ng-change="$ctrl.onChangeUser()"
+                   ng-disabled="$ctrl.transaction.busy()">
+            <md-option ng-value="theme"
+                       ng-repeat="theme in $ctrl.themes"
+                       ng-selected="$ctrl.$theme == theme ? true : false">
+                {{ theme | translate }}
+            </md-option>
+        </md-select>
+    </md-input-container>
+    <pip-location-edit class="map-edit bm24-flex"
+                       ng-hide="$ctrl.$party.type =='team'"
+                       pip-changed="$ctrl.onChangeBasicInfo()"
+                       pip-location-name="$ctrl.$party.loc_name"
+                       pip-location-pos="loc_pos">
+    </pip-location-edit>
+</form>

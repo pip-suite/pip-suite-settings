@@ -1,0 +1,202 @@
+<div class="pip-contact-info" ng-if="!$routing">
+    <md-progress-linear ng-show="$ctrl.transaction.busy()" md-mode="indeterminate" class="pip-progress-top">
+    </md-progress-linear>
+    <div class="bm12 layout-row">
+        <div class="md-tile-left" style="margin-right: 16px">
+            <pip-avatar-edit pip-party-id="$ctrl.$party.id" ng-if="!$ctrl.$avatarReset"
+                             pip-created="$ctrl.onPictureCreated($event)" pip-changed="$ctrl.onPictureChanged($control, $event)">
+            </pip-avatar-edit>
+        </div>
+
+        <div class="md-tile-content tp0 layout-align-center">
+            <h3 class="tm16 bm8 text-one-line">{{$ctrl.$party.name}}</h3>
+
+            <p class="text-primary text-overflow m0"> {{::'SETTINGS_BASIC_INFO_FROM' | translate}} {{$ctrl.$user.signup | formatLongDate }}</p>
+        </div>
+    </div>
+    <div class="layout-row" ng-repeat="email in $ctrl.contact.emails">
+        <md-input-container class="rm16 flex" ng-class="{ 'md-input-focused' : inputFocus,
+         'md-input-has-value' : email.email.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_EMAIL' | translate}}</label>
+            <input type="email" ng-focus="inputFocus = true"
+                   ng-blur="inputFocus = false;$ctrl.onSaveChanges('emails', $index, 'email')"
+                   class="flex" ng-model="email.email">
+
+        </md-input-container>
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="email.type" placeholder="{{$ctrl.emailTypes[0].name}}"
+                       ng-change="$ctrl.onSaveChanges('emails', $index, 'email')">
+                <md-option ng-value="eType.id" ng-repeat="eType in $ctrl.emailTypes">{{:: eType.name }}</md-option>
+            </md-select>
+        </md-input-container>
+
+    </div>
+
+    <div class="layout-row" ng-show="$ctrl.contact.emails.length == 0 || $ctrl.showEmailAddBlock">
+        <md-input-container class="rm16  flex" ng-class="{ 'md-input-focused' : inputEmailFocus,
+         'md-input-has-value' : newEmail.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_EMAIL' | translate}}</label>
+            <input type="email" ng-focus="inputEmailFocus = true"
+                   ng-blur="inputEmailFocus = false; $ctrl.showEmailAddBlock=false; $ctrl.onAddEmail($ctrl.newEmail);" ng-model="$ctrl.newEmail">
+        </md-input-container>
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="$ctrl.newEmailType" placeholder="{{$ctrl.emailTypes[0].name}}">
+                <md-option ng-value="eType.id" ng-repeat="eType in $ctrl.emailTypes">{{:: eType.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <md-button ng-show="$ctrl.contact.emails.length > 0 && !$ctrl.showEmailAddBlock" class="md-raised bm12"
+               ng-click="$ctrl.newEmail=''; $ctrl.showEmailAddBlock = true">
+               {{ 'SETTINGS_CONTACT_INFO_ADD_EMAIL' | translate }}
+    </md-button>
+
+    <div class="layout-row" ng-repeat="phone in $ctrl.contact.phones">
+        <md-input-container class="rm16  flex"  ng-class="{ 'md-input-focused' : inputFocus,
+         'md-input-has-value' : phone.number.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_PHONE' | translate}}</label>
+            <input type="tel" ng-focus="inputFocus = true"
+                   ng-blur="inputFocus = false; $ctrl.onSaveChanges('phones', $index, 'number')" ng-model="phone.number">
+        </md-input-container>
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="phone.type" placeholder="{{$ctrl.phoneTypes[0].name}}"
+                       ng-change="$ctrl.onSaveChanges('phones', $index, 'number')">
+                <md-option ng-value="phone.id" ng-repeat="phone in $ctrl.phoneTypes">{{:: phone.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <div class="layout-row" ng-show="$ctrl.contact.phones.length == 0 || $ctrl.showPhoneAddBlock">
+        <md-input-container class="rm16  flex" ng-class="{ 'md-input-focused' : inputPhoneFocus,
+         'md-input-has-value' : $ctrl.newPhone.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_PHONE' | translate}}</label>
+            <input type="tel" ng-focus="inputPhoneFocus = true"
+                   ng-blur="inputPhoneFocus = false; $ctrl.showPhoneAddBlock = false; $ctrl.onAddPhone($ctrl.newPhone);" ng-model="newPhone">
+        </md-input-container>
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="$ctrl.newPhoneType" placeholder="{{$ctrl.phoneTypes[0].name}}">
+                <md-option ng-value="phone.id" ng-repeat="phone in $ctrl.phoneTypes">{{:: phone.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <md-button ng-show="$ctrl.contact.phones.length > 0 && !$ctrl.showPhoneAddBlock" class="md-raised bm12"
+               ng-click="$ctrl.newPhone =''; $ctrl.showPhoneAddBlock = true">{{ 'SETTINGS_CONTACT_INFO_ADD_PHONE' |translate }}
+    </md-button>
+
+    <div class="layout-row layout-align-start-end" ng-repeat="address in $ctrl.contact.addresses">
+        <md-input-container class="rm16 pip-address flex" ng-class="{ 'md-input-focused' : inputFocus,
+         'md-input-has-value' : address.address.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_ADDRESS' | translate}}</label>
+            <textarea ng-model="address.address"
+                      ng-blur="inputFocus = false; $ctrl.onSaveChanges('addresses', $index, 'address')">
+            </textarea>
+        </md-input-container>
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="address.type" placeholder="{{$ctrl.addressTypes[0].name}}"
+                       ng-change="$ctrl.onSaveChanges('addresses', $index, 'address')">
+                <md-option ng-value="addresses.id" ng-repeat="addresses in $ctrl.addressTypes">{{:: addresses.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <div class="layout-row layout-align-start-end" ng-show="$ctrl.contact.addresses.length == 0 || $ctrl.showAddressAddBlock">
+        <md-input-container class="rm16 pip-address  flex" ng-class="{ 'md-input-focused' : inputAddressFocus,
+         'md-input-has-value' : $ctrl.newAddress.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_ADDRESS' | translate}}</label>
+            <textarea ng-model="$ctrl.newAddress"
+                      ng-blur="inputAddressFocus = false; $ctrl.showAddressAddBlock=false; $ctrl.onAddAddress($ctrl.newAddress);">
+            </textarea>
+        </md-input-container>
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="$ctrl.newAddressType" placeholder="{{$ctrl.addressTypes[0].name}}">
+                <md-option ng-value="address.id" ng-repeat="address in $ctrl.addressTypes">{{ address.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <md-button ng-show="$ctrl.contact.addresses.length > 0 && !$ctrl.showAddressAddBlock" class="md-raised bm12"
+               ng-click="$ctrl.newAddress = ''; $ctrl.showAddressAddBlock = true">{{ 'SETTINGS_CONTACT_INFO_ADD_ADDRESS' | translate }}
+    </md-button>
+
+    <div class="layout-row" ng-repeat="account in $ctrl.contact.ims">
+        <md-input-container class="rm16  flex"
+                            ng-class="{ 'md-input-focused' : inputFocus, 'md-input-has-value' : account.user.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_ACCOUNT_NAME' | translate}}</label>
+            <input type="text" ng-focus="inputFocus = true"
+                   ng-blur="inputFocus = false;$ctrl.onSaveChanges('ims', $index, 'user')" ng-model="account.user">
+        </md-input-container>
+
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="account.type" ng-change="$ctrl.onSaveChanges('ims', $index, 'user')"
+                       placeholder="{{$ctrl.imsTypes[0].name}}">
+                <md-option ng-value="ims.id" ng-repeat="ims in $ctrl.imsTypes">{{ ims.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <div class="layout-row" ng-show="$ctrl.contact.ims.length == 0 || $ctrl.showAccountAddBlock">
+        <md-input-container class="rm16  flex" ng-class="{ 'md-input-focused' : inputAccountFocus,
+         'md-input-has-value' : $ctrl.newAccount.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_ACCOUNT_NAME' | translate}}</label>
+            <input type="text" ng-focus="inputAccountFocus = true"
+                   ng-blur="inputAccountFocus = false; $ctrl.showAccountAddBlock=false; $ctrl.onAddAccount($ctrl.newAccount);" ng-model="$ctrl.newAccount">
+        </md-input-container>
+
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="$ctrl.newAccountType"
+                       placeholder="{{$ctrl.imsTypes[0].name}}">
+                <md-option ng-value="ims.id" ng-repeat="ims in $ctrl.imsTypes">{{:: ims.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <md-button ng-show="$ctrl.contact.ims.length > 0 && !$ctrl.showAccountAddBlock" class="md-raised bm12"
+               ng-click="$ctrl.newAccount = ''; $ctrl.showAccountAddBlock = true">{{ 'SETTINGS_CONTACT_INFO_ADD_ACCOUNT' | translate }}
+    </md-button>
+
+    <div class="layout-row" ng-repeat="website in $ctrl.contact.websites">
+        <md-input-container class="rm16  flex"
+                            ng-class="{ 'md-input-focused' : inputFocus,'md-input-has-value' : website.url.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_URL' | translate}}</label>
+            <input type="url" ng-focus="inputFocus = true"
+                   ng-blur="inputFocus = false;$ctrl.onSaveChanges('websites', $index, 'url')" ng-model="website.url">
+        </md-input-container>
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="website.type" ng-change="$ctrl.onSaveChanges('websites', $index, 'url')"
+                       placeholder="{{$ctrl.websiteTypes[0].name}}">
+                <md-option ng-value="website.id" ng-repeat="website in $ctrl.websiteTypes">{{:: website.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <div class="layout-row" ng-show="$ctrl.contact.websites.length == 0 || $ctrl.showWebsiteAddBlock">
+        <md-input-container class="rm16  flex " ng-class="{ 'md-input-focused' : inputWebsiteFocus,
+         'md-input-has-value' : newWebsite.length > 0 }">
+            <label>{{::'SETTINGS_CONTACT_INFO_URL' | translate}}</label>
+            <input type="url" ng-focus="inputWebsiteFocus = true"
+                   ng-blur="inputWebsiteFocus = false; $ctrl.showWebsiteAddBlock=false; $ctrl.onAddWebsite($ctrl.newWebsite);" ng-model="$ctrl.newWebsite"/>
+        </md-input-container>
+
+
+        <md-input-container class="md-block pip-select">
+            <md-select ng-model="$ctrl.newWebsiteType" placeholder="{{$ctrl.websiteTypes[0].name}}">
+                <md-option ng-value="website.id" ng-repeat="website in $ctrl.websiteTypes">{{:: website.name }}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+    <md-button ng-show="$ctrl.contact.websites.length > 0 && !$ctrl.showWebsiteAddBlock" class="md-raised bm24-flex"
+               ng-click="$ctrl.newWebsite=''; $ctrl.showWebsiteAddBlock = true">
+               {{ 'SETTINGS_CONTACT_INFO_ADD_URL' | translate }}
+    </md-button>
+
+</div>
